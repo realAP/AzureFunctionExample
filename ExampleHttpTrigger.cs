@@ -14,15 +14,17 @@ namespace AzureFunctionExample
             _logger = logger;
         }
 
+        //Decorator
         [Function("ExampleHttpTrigger")]
         public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
 
-            var example1 = req.Query["example1"];
-            var example2 = req.Query["example2"];
+            var inputOne = req.Query["input1"];
+            var inputTwo = req.Query["input2"];
 
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            return new OkObjectResult($"Welcome to Azure Functions, {example1}! Your second parameter is {example2}");
+            var currentSystemTime = DateTimeOffset.UtcNow;
+            return new OkObjectResult($"{currentSystemTime}: Welcome to Azure Functions:\n This is the value of the first input: {inputOne}\n This is the value of the second input: {inputTwo}");
         }
     }
 }
