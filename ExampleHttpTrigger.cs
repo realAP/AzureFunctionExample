@@ -18,13 +18,16 @@ namespace AzureFunctionExample
         [Function("ExampleHttpTrigger")]
         public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-
             var inputOne = req.Query["input1"];
             var inputTwo = req.Query["input2"];
 
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var currentSystemTime = DateTimeOffset.UtcNow;
-            return new OkObjectResult($"{currentSystemTime}: Welcome to Azure Functions:\n This is the value of the first input: {inputOne}\n This is the value of the second input: {inputTwo}");
+            // Get the Middle European Time (MEZ) time zone
+            TimeZoneInfo mezTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+            // Get current time in MEZ
+            DateTime mezTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mezTimeZone);
+            return new OkObjectResult($"{mezTime}: Welcome to Azure Functions:\n This is the value of the first input: {inputOne}\n This is the value of the second input: {inputTwo}");
         }
     }
 }
